@@ -1,0 +1,11 @@
+[package]
+name = "eda-media-discovery"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+serde.workspace = true
+walkdir.workspace = true
+regex.workspace = true
+thiserror.workspace = true
+uuid.workspace = true

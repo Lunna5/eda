@@ -1,0 +1,13 @@
+[package]
+name = "eda-ffprobe"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+
+[features]
+# Generate structs with #[serde(deny_unknown_fields)]
+# Only useful for testing!
+__internal_deny_unknown_fields = []
