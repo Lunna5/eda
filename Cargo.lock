@@ -35,6 +35,7 @@ dependencies = [
 name = "eda-media-discovery"
 version = "0.1.0"
 dependencies = [
+ "eda-ffprobe",
  "regex",
  "serde",
  "thiserror",

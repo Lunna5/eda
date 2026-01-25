@@ -9,3 +9,4 @@ walkdir.workspace = true
 regex.workspace = true
 thiserror.workspace = true
 uuid.workspace = true
+eda-ffprobe.workspace = true

@@ -14,3 +14,4 @@ walkdir = "2.5.0"
 regex = "1.12.2"
 thiserror = "2.0.17"
 uuid = { version = "1.18.1", features = ["v4"]}
+eda-ffprobe = { path = "crates/ffprobe" }
