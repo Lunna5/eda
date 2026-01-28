@@ -6,8 +6,10 @@ edition.workspace = true
 [dependencies]
 serde.workspace = true
 serde_json.workspace = true
-
+tokio = { workspace = true, optional = true }
 [features]
 # Generate structs with #[serde(deny_unknown_fields)]
 # Only useful for testing!
 __internal_deny_unknown_fields = []
+# Enable async ffprobe interface
+async = ["dep:tokio"]

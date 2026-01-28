@@ -38,6 +38,21 @@ pub fn ffprobe(path: impl AsRef<std::path::Path>) -> Result<FfProbe, FfProbeErro
     )
 }
 
+/// Execute ffprobe asynchronously with default settings and return the extracted data.
+///
+/// Requires the `async` feature to be enabled.
+/// See [`ffprobe_config_async`] if you need to customize settings.
+#[cfg(feature = "async")]
+pub async fn ffprobe_async(path: impl AsRef<std::path::Path>) -> Result<FfProbe, FfProbeError> {
+    ffprobe_config_async(
+        Config {
+            count_frames: false,
+            ffprobe_bin: "ffprobe".into(),
+        },
+        path,
+    ).await
+}
+
 /// Run ffprobe with a custom config.
 /// See [`ConfigBuilder`] for more details.
 pub fn ffprobe_config(
@@ -70,6 +85,42 @@ pub fn ffprobe_config(
 
     let out = cmd.output().map_err(FfProbeError::Io)?;
 
+    if !out.status.success() {
+        return Err(FfProbeError::Status(out));
+    }
+
+    serde_json::from_slice::<FfProbe>(&out.stdout).map_err(FfProbeError::Deserialize)
+}
+
+/// Run ffprobe asynchronously with a custom config.
+/// See [`ConfigBuilder`] for more details.
+/// Requires the `async` feature to be enabled.
+#[cfg(feature = "async")]
+pub async fn ffprobe_config_async(
+    config: Config,
+    path: impl AsRef<std::path::Path>
+) -> Result<FfProbe, FfProbeError> {
+    let path = path.as_ref();
+
+    let mut cmd = tokio::process::Command::new(config.ffprobe_bin);
+
+    // Default args.
+    cmd.args([
+        "-v",
+        "error",
+        "-show_format",
+        "-show_streams",
+        "-print_format",
+        "json",
+    ]);
+
+    if config.count_frames {
+        cmd.arg("-count_frames");
+    }
+
+    cmd.arg(path);
+
+    let out = cmd.output().await.map_err(FfProbeError::Io)?;
     if !out.status.success() {
         return Err(FfProbeError::Status(out));
     }
