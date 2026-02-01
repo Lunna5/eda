@@ -3,6 +3,12 @@ use serde::{Deserialize, Serialize};
 use super::{Movie, Series};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum LibraryContentKind {
+    Movies,
+    Series,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum LibraryContent {
     Movies(Vec<Movie>),
     Series(Vec<Series>),
